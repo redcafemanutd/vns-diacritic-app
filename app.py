@@ -36,6 +36,7 @@ def read_file_safely(path):
 def index():
     if request.method == 'POST':
         uploaded_files = request.files.getlist('files')
+
         for file in uploaded_files:
             if not file or not file.filename.endswith('.txt'):
                 continue
@@ -51,8 +52,7 @@ def index():
                 'status': 'Starting...'
             }
 
-            # For now, process one file at a time
-            return redirect(url_for('progress', id=article_id))
+        return redirect(url_for('summary'))
 
     return render_template('index.html')
 
