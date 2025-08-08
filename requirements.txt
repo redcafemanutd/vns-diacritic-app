@@ -1,7 +1,8 @@
-flask
-openai
+Flask
+gunicorn
+python-dotenv
 requests
-beautifulsoup4
-pillow
-python-docx
+openai
 chardet
+beautifulsoup4
+Pillow
