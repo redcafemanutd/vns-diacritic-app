@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head><title>Processed Articles</title></head>
+<body>
+  <h1>Uploaded Articles</h1>
+  <ul>
+    {% for article in articles %}
+      <li>
+        <a href="{{ url_for('article', id=article.id) }}">{{ article.headline }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+  <br><a href="{{ url_for('index') }}">← Upload more</a>
+</body>
+</html>
