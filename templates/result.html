@@ -7,8 +7,8 @@
     <img src="{{ image_url }}" alt="Image" style="max-width: 500px;"><br>
     <em>{{ image_caption }}</em>
   {% endif %}
-  {% for paragraph in body.split('\n\n') %}
-  <p>{{ paragraph.strip().replace('\n', ' ') }}</p>
+  {% for paragraph in body.split('\n') %}
+  <p>{{ paragraph.strip() }}</p>
   {% endfor %}
   <br><a href="{{ url_for('index') }}">← Process another file</a>
 </body>
