@@ -1,7 +1,7 @@
 from flask import Flask, request, render_template, redirect, url_for, send_file
 import uuid
 import os
-import openai
+from openai import OpenAI
 import tempfile
 import chardet
 import re
@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Load your OpenAI key (or use dotenv if you prefer)
-openai.api_key = os.getenv("OPENAI_API_KEY")  # Or hardcode for local testing
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))  # Or hardcode for local testing
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'uploads'

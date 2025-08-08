@@ -1,13 +1,15 @@
-import openai
+from openai import OpenAI
 from difflib import SequenceMatcher
 from bs4 import BeautifulSoup
 import requests
+import os
 import re
 from dotenv import load_dotenv
-load_dotenv()
-import os
 
-openai.api_key = openai.api_key or "your-fallback-key"  # Optional fallback
+load_dotenv()
+
+# Create a reusable client object
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 def validate_output(input_text, output_text, threshold=0.7):
     similarity = SequenceMatcher(None, input_text, output_text).ratio()
@@ -51,7 +53,7 @@ def search_for_image_vietnamplus(headline, article_text):
 
         for model in ["gpt-4o"]:
             try:
-                response = openai.ChatCompletion.create(
+                response = client.chat.completions.create(
                     model=model,
                     messages=[
                         {"role": "system", "content": (
@@ -61,7 +63,7 @@ def search_for_image_vietnamplus(headline, article_text):
                     max_tokens=512,
                     temperature=0
                 )
-                processed = response["choices"][0]["message"]["content"]
+                processed = response.choices[0].message.content
                 if validate_caption(original_caption, processed):
                     return url, processed
             except Exception as e:
@@ -97,7 +99,7 @@ def add_diacritics_to_text(original_text, primary_model="gpt-4o", fallback_model
 
     for attempt, model in enumerate([primary_model, fallback_model]):
         try:
-            response = openai.ChatCompletion.create(
+            response = client.chat.completions.create(
                 model=model,
                 messages=[
                     {"role": "system", "content": prompt},
@@ -106,7 +108,7 @@ def add_diacritics_to_text(original_text, primary_model="gpt-4o", fallback_model
                 max_tokens=2048,
                 temperature=0.0
             )
-            output = response["choices"][0]["message"]["content"]
+            output = response.choices[0].message.content
             if validate_output(original_text, output):
                 return output
         except Exception as e:
